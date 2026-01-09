@@ -1,0 +1,41 @@
+package Model;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class Deck {
+    List<Card> cardDeck = new ArrayList<>();
+
+    public void createDeck() {
+        for (CardType card : CardType.values()) {
+            int i = 1;
+
+            while (i < 15) {
+                cardDeck.add(new Card(i, card));
+                i++;
+            }
+        }
+    }
+    public void createBlackJackDeck() {
+        for (CardType card : CardType.values()) {
+            int i = 1;
+
+            while (i < 15) {
+                cardDeck.add(new BlackJackCards(i, card));
+                i++;
+            }
+        }
+    }
+    public void shuffleDeck(){
+        Collections.shuffle(cardDeck);
+    }
+    public List<Card> getCardDeck(){
+        return cardDeck;
+    }
+
+    @Override
+    public String toString() {
+        return ""+cardDeck;
+    }
+}
