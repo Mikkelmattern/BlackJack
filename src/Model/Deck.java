@@ -17,6 +17,7 @@ public class Deck {
             }
         }
     }
+
     public void createBlackJackDeck() {
         for (CardType card : CardType.values()) {
             int i = 1;
@@ -26,16 +27,23 @@ public class Deck {
                 i++;
             }
         }
+        for (Card c : cardDeck) {
+            if (c instanceof BlackJackCards bj) {
+                bj.makeBlackJack();
+            }
+        }
     }
-    public void shuffleDeck(){
+
+    public void shuffleDeck() {
         Collections.shuffle(cardDeck);
     }
-    public List<Card> getCardDeck(){
+
+    public List<Card> getCardDeck() {
         return cardDeck;
     }
 
     @Override
     public String toString() {
-        return ""+cardDeck;
+        return "" + cardDeck;
     }
 }

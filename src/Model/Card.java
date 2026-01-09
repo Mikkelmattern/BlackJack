@@ -8,9 +8,23 @@ public class Card {
         this.type = type;
     }
 
+    public int getValue() {
+        return 0;
+    }
+    public int getCardNumber(){
+        return cardNumber;
+    }
+
 
     @Override
     public String toString() {
-        return cardNumber+type.getEmoji();
+        String numCard = ""+cardNumber;
+        switch (cardNumber){
+            case 14: numCard = "ACE"; break;
+            case 13: numCard = "KING"; break;
+            case 12: numCard = "QUEEN"; break;
+            case 11: numCard = "JACK"; break;
+        }
+        return numCard+type.getEmoji();
     }
 }
