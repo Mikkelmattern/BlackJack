@@ -14,6 +14,8 @@ public class Card {
     public int getCardNumber(){
         return cardNumber;
     }
+    public void setValue(int i){
+    }
 
 
     @Override

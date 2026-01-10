@@ -10,13 +10,19 @@ public class BlackJackCards extends Card {
     void makeBlackJack() {
         if (cardNumber >= 10 && cardNumber != 14) {
             value = 10;
-        } else value = cardNumber;
+        } else if (cardNumber == 14) {
+            value = 11;
+        } else
+            value = cardNumber;
     }
-    public void setValue(int i){
+
+    @Override
+    public void setValue(int i) {
         value = i;
     }
+
     @Override
-    public int getValue(){
-        return  value;
+    public int getValue() {
+        return value;
     }
 }

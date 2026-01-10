@@ -10,16 +10,17 @@ public class StartApp {
     Deck deck1 = new Deck();
     Player player1 = new Player(1000, "Mikkel");
     Scanner sc = new Scanner(System.in);
+    List<Card> playersCard = player1.getPlayerCards();
 
     public void begin() {
         deck1.createBlackJackDeck();
         deck1.shuffleDeck();
 
-        for(int a = 0; a<50; a++){
+        for (int a = 0; a < 50; a++) {
             deck1.shuffleDeck();
             givePlayerCards();
-            System.out.println(String.format("Dine kort %s%nResultat: %s", showPlayerCards(), sumOfCardsBlackJack()));
-            player1.getPlayerCards().clear();
+            System.out.println(String.format("Dine kort %s%nResultat: %s", showPlayerCards(), calculateHandValue(playersCard)));
+           playersCard.clear();
         }
     }
 
@@ -28,11 +29,11 @@ public class StartApp {
     }
 
     public List<Card> showPlayerCards() {
-        return player1.getPlayerCards();
+        return playersCard;
     }
 
     public int sumOfCardsBlackJack() {
-        ListIterator<Card> cardListIterator = player1.getPlayerCards().listIterator();
+        ListIterator<Card> cardListIterator = playersCard.listIterator();
         int totalValue = 0;
         while (cardListIterator.hasNext()) {
             Card card1 = cardListIterator.next();
@@ -42,7 +43,7 @@ public class StartApp {
     }
 
     public boolean isTwentyOne() {
-        return sumOfCardsBlackJack() == 21;
+        return calculateHandValue(playersCard) == 21;
     }
 
     public boolean canHit() {
@@ -50,8 +51,39 @@ public class StartApp {
     }
 
     public void hitMe() {
+        int i = playersCard.size();
+        checkForAces(playersCard.getLast());
         if (canHit()) {
             player1.addCard(deck1.getCardDeck());
         }
     }
+
+    public void checkForAces(Card card) {
+        if (sumOfCardsBlackJack() > 11) {
+            card.setValue(1);
+        } else {
+            card.setValue(11);
+        }
+    }
+
+    public boolean isAce(Card card) {
+        return card.getCardNumber() == 14;
+    }
+
+    public int calculateHandValue(List<Card> cards){
+        int sum = 0;
+        int aces = 0;
+        for (Card c : cards){
+           sum+= c.getValue();
+           if(isAce(c)){
+               aces++;
+           }
+           while(sum > 21 && aces > 0){
+               sum -= 10;
+               aces--;
+           }
+        }
+        return sum;
+    }
+
 }

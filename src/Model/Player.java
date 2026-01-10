@@ -16,23 +16,16 @@ public class Player {
     public void startCards(List<Card> cardsToGet, int cardAmount) {
         int i = 0;
         while (cardAmount > playerCards.size()) {
-           playerCards.add(cardsToGet.get(i));
-           i++;
+            playerCards.add(cardsToGet.get(i));
+            i++;
         }
-        initSpecialAce();
     }
-    public List<Card> getPlayerCards(){
+
+    public List<Card> getPlayerCards() {
         return playerCards;
     }
-    public void addCard(List<Card> cardsToGet){
-        playerCards.add(cardsToGet.get(playerCards.size()+1));
-    }
-    public void initSpecialAce(){
-        Card a = playerCards.getFirst();
-        if(a.getCardNumber() == 14){
-            if(a instanceof BlackJackCards){
-               ((BlackJackCards) a).setValue(11);
-            }
-        }
+
+    public void addCard(List<Card> cardsToGet) {
+        playerCards.add(cardsToGet.get(playerCards.size() + 1));
     }
 }
