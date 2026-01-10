@@ -12,11 +12,16 @@ public class Player {
         this.balance = balance;
         this.name = name;
     }
+    public Player(String name){
+        this.name = name;
+        this.balance = Integer.MAX_VALUE;
+    }
 
     public void startCards(List<Card> cardsToGet, int cardAmount) {
         int i = 0;
         while (cardAmount > playerCards.size()) {
             playerCards.add(cardsToGet.get(i));
+            cardsToGet.remove(i);
             i++;
         }
     }

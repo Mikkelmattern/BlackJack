@@ -2,86 +2,83 @@ package Logic;
 
 import Model.*;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Scanner;
 
 public class StartApp {
     Deck deck1 = new Deck();
-    Player player1 = new Player(1000, "Mikkel");
+    Player dealer = new Player("Dealer");
     Scanner sc = new Scanner(System.in);
-    List<Card> playersCard = player1.getPlayerCards();
+    List<Card> dealerCards = dealer.getPlayerCards();
+    List<Player> playerList = new ArrayList<>();
 
     public void begin() {
         deck1.createBlackJackDeck();
-        deck1.shuffleDeck();
+        addPlayer(100, "Mikkel");
+    }
 
-        for (int a = 0; a < 50; a++) {
-            deck1.shuffleDeck();
-            givePlayerCards();
-            System.out.println(String.format("Dine kort %s%nResultat: %s", showPlayerCards(), calculateHandValue(playersCard)));
-           playersCard.clear();
+
+    public void initPlayers() {
+        for (Player p : playerList) {
+            givePlayerCards(p);
+            calculateHandValue(p.getPlayerCards());
+            System.out.println(p.getPlayerCards() + "\n" + calculateHandValue(p.getPlayerCards()));
         }
     }
 
-    public void givePlayerCards() {
-        player1.startCards(deck1.getCardDeck(), 2);
+    public void initDealer() {
+        givePlayerCards(dealer);
+        System.out.println(dealerCards + "\n" + calculateHandValue(dealerCards));
     }
 
-    public List<Card> showPlayerCards() {
-        return playersCard;
-    }
+    public void dealerLogic() {
+        initDealer();
+        if (calculateHandValue(dealerCards) < 17) {
 
-    public int sumOfCardsBlackJack() {
-        ListIterator<Card> cardListIterator = playersCard.listIterator();
-        int totalValue = 0;
-        while (cardListIterator.hasNext()) {
-            Card card1 = cardListIterator.next();
-            totalValue += card1.getValue();
-        }
-        return totalValue;
-    }
-
-    public boolean isTwentyOne() {
-        return calculateHandValue(playersCard) == 21;
-    }
-
-    public boolean canHit() {
-        return sumOfCardsBlackJack() < 21;
-    }
-
-    public void hitMe() {
-        int i = playersCard.size();
-        checkForAces(playersCard.getLast());
-        if (canHit()) {
-            player1.addCard(deck1.getCardDeck());
         }
     }
 
-    public void checkForAces(Card card) {
-        if (sumOfCardsBlackJack() > 11) {
-            card.setValue(1);
-        } else {
-            card.setValue(11);
-        }
+    public void addPlayer(int startValue, String name) {
+        playerList.add(new Player(startValue, name));
+    }
+
+    public void givePlayerCards(Player player) {
+        player.startCards(deck1.getCardDeck(), 2);
+    }
+
+    public List<Card> showPlayerCards(Player player) {
+        return player.getPlayerCards();
+    }
+
+    public boolean isTwentyOne(Player player) {
+        return calculateHandValue(player.getPlayerCards()) == 21;
+    }
+
+    public boolean canHit(Player player) {
+        return calculateHandValue(player.getPlayerCards()) < 21;
+    }
+
+    public void hitMe(Player player) {
+        player.addCard(deck1.getCardDeck());
     }
 
     public boolean isAce(Card card) {
         return card.getCardNumber() == 14;
     }
 
-    public int calculateHandValue(List<Card> cards){
+    public int calculateHandValue(List<Card> cards) {
         int sum = 0;
         int aces = 0;
-        for (Card c : cards){
-           sum+= c.getValue();
-           if(isAce(c)){
-               aces++;
-           }
-           while(sum > 21 && aces > 0){
-               sum -= 10;
-               aces--;
-           }
+        for (Card c : cards) {
+            sum += c.getValue();
+            if (isAce(c)) {
+                aces++;
+            }
+            while (sum > 21 && aces > 0) {
+                sum -= 10;
+                aces--;
+            }
         }
         return sum;
     }
