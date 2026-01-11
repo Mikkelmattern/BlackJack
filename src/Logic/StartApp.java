@@ -17,22 +17,17 @@ public class StartApp {
         createDeckAndShuffle(deck1);
         addPlayer(100, "Mikkel");
         while (true) {
-            dealerLogic();
+            initDealer();
             initPlayers();
-            if (!(calculateHandValue(dealerCards) >= 16)) {
-                hitMe(dealer);
-            } //
-            if (isTwentyOne(dealer)) {
-                System.out.println("Dealer har vundet!");
-            } else if (calculateHandValue(dealerCards) > 21) {
-                System.out.println("Dealer busted!");
-
-            }
             for (Player p : playerList) {
-                doPlayerActions(p);
+                if (isTwentyOne(dealer) && isTwentyOne(p)) {
+                    System.out.println("Push!");
+                } else if (isTwentyOne(dealer)) {
+                    System.out.println("Dealer vinder!");
+                } else doPlayerActions(p);
             }
             if (sc.nextLine().matches("^1$")) {
-                break;
+                System.exit(0);
             }
         }
     }
@@ -43,10 +38,7 @@ public class StartApp {
     }
 
     public void doPlayerActions(Player p) {
-        while (canHit(p)) {
-            if (promptHitStandOrSplit(p) == PlayerActions.STAND){
-                break;
-            }
+        while (canHit(p) && promptHitStandOrSplit(p) == PlayerActions.HIT) {
             System.out.println(p.getPlayerCards() + "\n" + calculateHandValue(p.getPlayerCards()));
         }
 
@@ -86,7 +78,6 @@ public class StartApp {
     }
 
     public void dealerLogic() {
-        initDealer();
         while (calculateHandValue(dealerCards) < 17) {
             hitMe(dealer);
             System.out.println(dealerCards + "\n" + calculateHandValue(dealerCards));
