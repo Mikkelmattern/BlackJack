@@ -21,7 +21,7 @@ public class StartApp {
             initPlayers();
             if (!(calculateHandValue(dealerCards) >= 16)) {
                 hitMe(dealer);
-            }
+            } //
             if (isTwentyOne(dealer)) {
                 System.out.println("Dealer har vundet!");
             } else if (calculateHandValue(dealerCards) > 21) {
