@@ -31,6 +31,14 @@ public class Player {
     }
 
     public void addCard(List<Card> cardsToGet) {
-        playerCards.add(cardsToGet.get(playerCards.size() + 1));
+        playerCards.add(cardsToGet.get(playerCards.size()+1));
+    }
+    public String getName(){
+        return name;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }
