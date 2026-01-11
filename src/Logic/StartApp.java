@@ -14,28 +14,82 @@ public class StartApp {
     List<Player> playerList = new ArrayList<>();
 
     public void begin() {
-        deck1.createBlackJackDeck();
+        createDeckAndShuffle(deck1);
         addPlayer(100, "Mikkel");
-    }
+        while (true) {
+            dealerLogic();
+            initPlayers();
+            if (!(calculateHandValue(dealerCards) >= 16)) {
+                hitMe(dealer);
+            }
+            if (isTwentyOne(dealer)) {
+                System.out.println("Dealer har vundet!");
+            } else if (calculateHandValue(dealerCards) > 21) {
+                System.out.println("Dealer busted!");
 
-
-    public void initPlayers() {
-        for (Player p : playerList) {
-            givePlayerCards(p);
-            calculateHandValue(p.getPlayerCards());
-            System.out.println(p.getPlayerCards() + "\n" + calculateHandValue(p.getPlayerCards()));
+            }
+            for (Player p : playerList) {
+                doPlayerActions(p);
+            }
+            if (sc.nextLine().matches("^1$")) {
+                break;
+            }
         }
     }
 
+    public void createDeckAndShuffle(Deck deck) {
+        deck.createBlackJackDeck();
+        deck.shuffleDeck();
+    }
+
+    public void doPlayerActions(Player p) {
+        while (canHit(p)) {
+            if (promptHitStandOrSplit(p) == PlayerActions.STAND){
+                break;
+            }
+            System.out.println(p.getPlayerCards() + "\n" + calculateHandValue(p.getPlayerCards()));
+        }
+
+    }
+
+    public void initPlayers() {
+        for (Player p : playerList) {
+            p.getPlayerCards().clear();
+            givePlayerCards(p);
+            calculateHandValue(p.getPlayerCards());
+            System.out.println(p.getName() + "'s kort: " + p.getPlayerCards() + "\n" + calculateHandValue(p.getPlayerCards()));
+        }
+    }
+
+    public PlayerActions promptHitStandOrSplit(Player player) {
+        System.out.println("Hit or Stand?");
+        String scannerOut = sc.nextLine();
+        while (!(scannerOut.matches("^(?i)(Hit|Stand|Split)$"))) {
+            System.out.println("Choose hit or stand");
+            scannerOut = sc.nextLine();
+        }
+        return switch (scannerOut.toUpperCase()) {
+            case "HIT" -> {
+                hitMe(player);
+                yield PlayerActions.HIT;
+            }
+            case "SPLIT" -> PlayerActions.SPLIT;
+            case "STAND" -> PlayerActions.STAND;
+            default -> null;
+        };
+    }
+
     public void initDealer() {
+        dealer.getPlayerCards().clear();
         givePlayerCards(dealer);
         System.out.println(dealerCards + "\n" + calculateHandValue(dealerCards));
     }
 
     public void dealerLogic() {
         initDealer();
-        if (calculateHandValue(dealerCards) < 17) {
-
+        while (calculateHandValue(dealerCards) < 17) {
+            hitMe(dealer);
+            System.out.println(dealerCards + "\n" + calculateHandValue(dealerCards));
         }
     }
 
