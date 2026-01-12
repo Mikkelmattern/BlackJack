@@ -20,11 +20,35 @@ public class StartApp {
             initDealer();
             initPlayers();
             for (Player p : playerList) {
+                List<Card> playersCard = p.getPlayerCards();
+                String name = p.getName();
+                int playerHandValue = calculateHandValue(playersCard);
+                int dealerHandValue = calculateHandValue(dealerCards);
                 if (isTwentyOne(dealer) && isTwentyOne(p)) {
                     System.out.println("Push!");
                 } else if (isTwentyOne(dealer)) {
                     System.out.println("Dealer vinder!");
-                } else doPlayerActions(p);
+                    continue;
+                } else {
+                    doPlayerActions(p);
+                    dealerLogic();
+                }
+                if (playerHandValue > 21) {
+                    System.out.println(name + "busted!");
+                    return;
+                }
+                if (dealerHandValue > 21) {
+                    System.out.println("Dealer busted!");
+                    return;
+                }
+                if (dealerHandValue > playerHandValue) {
+                    System.out.println("Dealer vinder!");
+                    return;
+                }
+                if (dealerHandValue < playerHandValue) {
+                    System.out.println(name + " vinder!");
+                    return;
+                }
             }
             if (sc.nextLine().matches("^1$")) {
                 System.exit(0);
@@ -62,11 +86,14 @@ public class StartApp {
         }
         return switch (scannerOut.toUpperCase()) {
             case "HIT" -> {
-                hitMe(player);
+                doHit(player);
                 yield PlayerActions.HIT;
             }
             case "SPLIT" -> PlayerActions.SPLIT;
-            case "STAND" -> PlayerActions.STAND;
+            case "STAND" -> {
+                yield PlayerActions.STAND;
+
+            }
             default -> null;
         };
     }
@@ -74,12 +101,12 @@ public class StartApp {
     public void initDealer() {
         dealer.getPlayerCards().clear();
         givePlayerCards(dealer);
-        System.out.println(dealerCards + "\n" + calculateHandValue(dealerCards));
+        System.out.println("Dealers cards: " + dealerCards + "\n" + calculateHandValue(dealerCards));
     }
 
     public void dealerLogic() {
         while (calculateHandValue(dealerCards) < 17) {
-            hitMe(dealer);
+            doHit(dealer);
             System.out.println(dealerCards + "\n" + calculateHandValue(dealerCards));
         }
     }
@@ -104,8 +131,12 @@ public class StartApp {
         return calculateHandValue(player.getPlayerCards()) < 21;
     }
 
-    public void hitMe(Player player) {
+    public void doHit(Player player) {
         player.addCard(deck1.getCardDeck());
+    }
+
+    public void doStand(Player player) {
+
     }
 
     public boolean isAce(Card card) {
