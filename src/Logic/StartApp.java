@@ -63,9 +63,6 @@ public class StartApp {
     }
 
     public void doPlayerActions(Player p) {
-        if (actionAnswer == PlayerActions.SPLIT) {
-
-        }
         while (canHit(p)) {
             PlayerActions actionAnswer = promptHitStandOrSplit(p);
             if (actionAnswer == PlayerActions.HIT) {
@@ -97,14 +94,10 @@ public class StartApp {
             scannerOut = sc.nextLine();
         }
         return switch (scannerOut.toUpperCase()) {
-            case "HIT" -> {
-                yield PlayerActions.HIT;
-            }
+            case "HIT" -> PlayerActions.HIT;
             case "SPLIT" -> PlayerActions.SPLIT;
-            case "STAND" -> {
-                yield PlayerActions.STAND;
-
-            }
+            case "STAND" -> PlayerActions.STAND;
+            case "CONTINUE" -> PlayerActions.CONTINUE;
             default -> null;
         };
     }
