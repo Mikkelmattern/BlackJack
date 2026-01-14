@@ -26,29 +26,30 @@ public class StartApp {
                 int dealerHandValue = calculateHandValue(dealerCards);
                 if (isTwentyOne(dealer) && isTwentyOne(p)) {
                     System.out.println("Push!");
+                    continue;
                 } else if (isTwentyOne(dealer)) {
                     System.out.println("Dealer vinder!");
                     continue;
                 } else {
                     doPlayerActions(p);
+
                     dealerLogic();
+
                 }
                 if (playerHandValue > 21) {
                     System.out.println(name + "busted!");
                     return;
-                }
-                if (dealerHandValue > 21) {
+                } else if (dealerHandValue > 21) {
                     System.out.println("Dealer busted!");
                     return;
-                }
-                if (dealerHandValue > playerHandValue) {
+                } else if (dealerHandValue > playerHandValue) {
                     System.out.println("Dealer vinder!");
                     return;
-                }
-                if (dealerHandValue < playerHandValue) {
+                } else if (dealerHandValue < playerHandValue) {
                     System.out.println(name + " vinder!");
                     return;
                 }
+
             }
             if (sc.nextLine().matches("^1$")) {
                 System.exit(0);
@@ -62,8 +63,19 @@ public class StartApp {
     }
 
     public void doPlayerActions(Player p) {
-        while (canHit(p) && promptHitStandOrSplit(p) == PlayerActions.HIT) {
-            System.out.println(p.getPlayerCards() + "\n" + calculateHandValue(p.getPlayerCards()));
+        if (actionAnswer == PlayerActions.SPLIT) {
+
+        }
+        while (canHit(p)) {
+            PlayerActions actionAnswer = promptHitStandOrSplit(p);
+            if (actionAnswer == PlayerActions.HIT) {
+                System.out.println(p.getPlayerCards() + "\n" + calculateHandValue(p.getPlayerCards()));
+            } else if(actionAnswer == PlayerActions.SPLIT && canSplit(p.getPlayerCards())) {
+                //TODO
+                //add doSplit method
+            } else if (actionAnswer == PlayerActions.CONTINUE) {
+                break;
+            }
         }
 
     }
@@ -86,7 +98,6 @@ public class StartApp {
         }
         return switch (scannerOut.toUpperCase()) {
             case "HIT" -> {
-                doHit(player);
                 yield PlayerActions.HIT;
             }
             case "SPLIT" -> PlayerActions.SPLIT;
@@ -157,6 +168,12 @@ public class StartApp {
             }
         }
         return sum;
+    }
+
+    public boolean canSplit(List<Card> cards) {
+        BlackJackCards firstCard = (BlackJackCards) cards.getFirst();
+        BlackJackCards lastCard = (BlackJackCards) cards.getLast();
+        return (cards.size() == 2 && firstCard.getValue() == lastCard.getValue());
     }
 
 }
