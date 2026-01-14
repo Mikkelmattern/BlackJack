@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
-    private List<Card> playerCards = new ArrayList<>();
-    private int balance = 0;
-    private String name;
+    private List<Hand> playerHands = new ArrayList<>();
+    private int balance;
+    private final String name;
 
     public Player(int balance, String name) {
         this.balance = balance;
@@ -17,21 +17,21 @@ public class Player {
         this.balance = Integer.MAX_VALUE;
     }
 
-    public void startCards(List<Card> cardsToGet, int cardAmount) {
+    public void startCards(List<Hand> cardsToGet, int cardAmount) {
         int i = 0;
-        while (cardAmount > playerCards.size()) {
-            playerCards.add(cardsToGet.get(i));
+        while (cardAmount > playerHands.size()) {
+            playerHands.add(cardsToGet.get(i));
             cardsToGet.remove(i);
             i++;
         }
     }
 
-    public List<Card> getPlayerCards() {
-        return playerCards;
+    public List<Hand> getPlayerHand() {
+        return playerHands;
     }
 
-    public void addCard(List<Card> cardsToGet) {
-        playerCards.add(cardsToGet.get(playerCards.size()+1));
+    public void addCard(List<Hand> cardsToGet) {
+        playerHands.add(cardsToGet.get(playerHands.size()+1));
     }
     public String getName(){
         return name;
@@ -40,5 +40,13 @@ public class Player {
     @Override
     public String toString() {
         return name;
+    }
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
     }
 }
