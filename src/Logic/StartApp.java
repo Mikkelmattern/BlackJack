@@ -19,7 +19,13 @@ public class StartApp {
      * Creates a new deck, registers the initial player, and runs the main game loop
      * until the user exits.
      */
-     public void begin() {
+/**
+     * Starts and runs a new blackjack game session.
+     *
+     * Initializes the deck, registers the initial player, and drives the main
+     * game loop until the user chooses to exit.
+     */
+      public void begin() {
         createDeckAndShuffle(deck1);
         addPlayer(100, "Mikkel");
         while (true) {
