@@ -17,11 +17,10 @@ public class Player {
         this.balance = Integer.MAX_VALUE;
     }
 
-    public void startCards(List<Hand> cardsToGet, int cardAmount) {
+    public void startCards(Deck cardsToGet, int cardAmount) {
         int i = 0;
         while (cardAmount > playerHands.size()) {
-            playerHands.add(cardsToGet.get(i));
-            cardsToGet.remove(i);
+            playerHands.getFirst().getCards().add(cardsToGet.getCardDeck().get(i));
             i++;
         }
     }

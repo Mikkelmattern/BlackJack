@@ -23,8 +23,6 @@ public class StartApp {
                 List<Hand> playersCard = p.getPlayerHand();
                 String name = p.getName();
 
-                int playerHandValue = calculateHandValue(playersCard);
-                int dealerHandValue = calculateHandValue(dealerCards);
                 if (isTwentyOne(dealer) && isTwentyOne(p)) {
                     System.out.println("Push!");
                     continue;
@@ -68,7 +66,7 @@ public class StartApp {
             PlayerActions actionAnswer = promptHitStandOrSplit(p);
             if (actionAnswer == PlayerActions.HIT) {
                 System.out.println(p.getPlayerHand() + "\n" + calculateHandValue(p.getPlayerHand()));
-            } else if (actionAnswer == PlayerActions.SPLIT && canSplit(p.getPlayerHand())) {
+            } else if (actionAnswer == PlayerActions.SPLIT && canSplit(p.getPlayerHand().getFirst().getCards())) {
                 //TODO
                 //add doSplit method
             } else if (actionAnswer == PlayerActions.CONTINUE) {
@@ -110,7 +108,7 @@ public class StartApp {
     }
 
     public void dealerLogic() {
-        while (calculateHandValue(dealerCards) < 17) {
+        while (calculateHandValue(dealerCards).getFirst() < 17) {
             doHit(dealer);
             System.out.println(dealerCards + "\n" + calculateHandValue(dealerCards));
         }
@@ -121,15 +119,15 @@ public class StartApp {
     }
 
     public void givePlayerCards(Player player) {
-        player.startCards(deck1.getCardDeck(), 2);
+        player.startCards(deck1, 2);
     }
 
     public List<Card> showPlayerCards(Player player) {
-        return player.getPlayerHand();
+        return player.getPlayerHand().getFirst().getCards();
     }
 
-    public boolean isTwentyOne(Player player) {
-        return calculateHandValue(player.getPlayerHand()) == 21;
+    public boolean isTwentyOne(Hand hand) {
+        return calculateHandValue(hand.getCards()) == 21;
     }
 
     public boolean canHit(Player player) {
@@ -148,21 +146,20 @@ public class StartApp {
         return card.getCardNumber() == 14;
     }
 
-    public List<Integer> calculateHandValue(List<Hand> hands) {
-        List<Integer> handValues = new ArrayList<>();
-        for (Hand h : hands) {
+    public int calculateHandValue(List<Card> cards) {
+        for (Card c : cards) {
             int sum = 0;
             int aces = 0;
-            for (Card c : h.getCards()) {
-                sum += c.getValue();
-                if (isAce(c)) {
-                    aces++;
-                }
+
+            sum += c.getValue();
+            if (isAce(c)) {
+                aces++;
                 while (sum > 21 && aces > 0) {
                     sum -= 10;
                     aces--;
                 }
-            } handValues.add(sum);
+            }
+           return sum;
         }
         return handValues;
     }
