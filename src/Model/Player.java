@@ -4,13 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
-    private List<Hand> playerHands = new ArrayList<>();
+    private final List<Hand> playerHands = new ArrayList<>();
     private int balance;
     private final String name;
+    private Deck deck = new Deck();
 
     public Player(int balance, String name) {
         this.balance = balance;
         this.name = name;
+    }
+    public void initPlayers() {
+            p.getPlayerHand().clear();
+            givePlayerCards(p);
+            calculateHandValue(p);
     }
     public Player(String name){
         this.name = name;
@@ -24,14 +30,14 @@ public class Player {
             i++;
         }
     }
+    public void givePlayerCards() {
+        startCards(deck, 2);
+    }
 
     public List<Hand> getPlayerHand() {
         return playerHands;
     }
 
-    public void addCard(List<Hand> cardsToGet) {
-        playerHands.add(cardsToGet.get(playerHands.size()+1));
-    }
     public String getName(){
         return name;
     }

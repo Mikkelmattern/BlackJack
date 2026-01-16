@@ -3,7 +3,7 @@ package Model;
 public class Card {
     int cardNumber;
     CardType type;
-    Card(int cardNumber, CardType type){
+    protected Card(int cardNumber, CardType type){
         this.cardNumber = cardNumber;
         this.type = type;
     }

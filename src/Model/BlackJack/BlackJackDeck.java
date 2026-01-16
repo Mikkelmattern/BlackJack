@@ -1,37 +1,27 @@
-package Model;
+package Model.BlackJack;
 
-import Model.BlackJack.BlackJackCard;
+import Model.Card;
+import Model.CardType;
+import Model.Deck;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class Deck {
+public class BlackJackDeck extends Deck {
     List<Card> cardDeck = new ArrayList<>();
+
+    public BlackJackDeck() {
+        createDeck();
+    }
 
     public void createDeck() {
         for (CardType card : CardType.values()) {
             int i = 1;
 
-            while (i < 15) {
-                cardDeck.add(new Card(i, card));
-                i++;
-            }
-        }
-    }
-
-    public void createBlackJackDeck() {
-        for (CardType card : CardType.values()) {
-            int i = 1;
-
-            while (i < 15) {
+            while (i <= 14) {
                 cardDeck.add(new BlackJackCard(i, card));
                 i++;
-            }
-        }
-        for (Card c : cardDeck) {
-            if (c instanceof BlackJackCard bj) {
-                bj.makeBlackJack();
             }
         }
     }

@@ -1,10 +1,15 @@
-package Model;
+package Model.BlackJack;
 
-public class BlackJackCards extends Card {
+import Model.Card;
+import Model.CardType;
+
+public class BlackJackCard extends Card {
     int value;
+    int cardNumber;
 
-    BlackJackCards(int cardNumber, CardType type) {
+    public BlackJackCard(int cardNumber, CardType type) {
         super(cardNumber, type);
+        makeBlackJack();
     }
 
     void makeBlackJack() {
