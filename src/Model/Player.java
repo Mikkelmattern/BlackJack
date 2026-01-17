@@ -1,22 +1,28 @@
 package Model;
 
+import Model.BlackJack.BlackJackCard;
+import Model.BlackJack.BlackJackDeck;
+
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Player {
     private final List<Hand> playerHands = new ArrayList<>();
     private int balance;
     private final String name;
-    private Deck deck = new Deck();
 
     public Player(int balance, String name) {
         this.balance = balance;
         this.name = name;
     }
     public void initPlayers() {
-            p.getPlayerHand().clear();
-            givePlayerCards(p);
-            calculateHandValue(p);
+            getPlayerHand().clear();
+            givePlayerCards();
+            calculateHandValue(playerHands.getFirst());
+    }
+    public void calculateHandValue(){
+
     }
     public Player(String name){
         this.name = name;

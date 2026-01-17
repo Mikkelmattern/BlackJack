@@ -13,15 +13,13 @@ public class StartApp {
     BlackJackDeck deck1 = new BlackJackDeck();
     Player dealer = new Player("Dealer");
     Scanner sc = new Scanner(System.in);
-    List<Hand> dealerCards = dealer.getPlayerHand();
+    Hand dealersHand = dealer.getPlayerHand().getFirst();
     List<Player> playerList = new ArrayList<>();
+    int dealerHandValue;
+    int currentHandValue;
+    String name;
 
-    /**
-     * Initializes and runs a new game session.
-     *
-     * Creates a new deck, registers the initial player, and runs the main game loop
-     * until the user exits.
-     */
+
     /**
      * Starts and runs a new blackjack game session.
      * <p>
@@ -33,7 +31,7 @@ public class StartApp {
         addPlayer(100, "Mikkel");
         while (true) {
             initDealer();
-            initPlayers();
+            System.out.println("Dealers cards: " + dealersHand + "\n" + calculateHandValue(dealersHand));
             for (Player p : playerList) {
 
                 List<Hand> playersCard = p.getPlayerHand();
@@ -118,13 +116,12 @@ public class StartApp {
     public void initDealer() {
         dealer.getPlayerHand().clear();
         givePlayerCards(dealer);
-        System.out.println("Dealers cards: " + dealerCards + "\n" + calculateHandValue(dealerCards.getFirst().getCards()));
     }
 
     public void dealerLogic() {
-        while (calculateHandValue(dealerCards.getFirst().getCards()) < 17) {
-            doHit(dealer);
-            System.out.println(dealerCards + "\n" + calculateHandValue(dealerCards.getFirst().getCards()));
+        while (calculateHandValue(dealersHand) < 17) {
+            doHit(dealersHand);
+            System.out.println(dealersHand + "\n" + calculateHandValue(dealersHand));
         }
     }
 
@@ -141,11 +138,11 @@ public class StartApp {
     }
 
     public boolean isTwentyOne(Hand hand) {
-        return calculateHandValue(hand.getCards()) == 21;
+        return calculateHandValue(hand) == 21;
     }
 
     public boolean canHit(Hand hand) {
-        return calculateHandValue(hand.getCards()) < 21;
+        return calculateHandValue(hand) > 21;
     }
 
     public void doHit(Hand hand) {
@@ -156,36 +153,44 @@ public class StartApp {
 
     }
 
-    public boolean isAce(Card card) {
-        return card.getCardNumber() == 14;
-    }
-
-    public int calculateHandValue(Hand hand) {
-        Iterator<Card> iterator = hand.getCards().iterator();
-        int totalSum = 0;
-        int aces = 0;
-        while (iterator.hasNext()) {
-            Card currentCard = iterator.next();
-            int sum = 0;
-
-            sum += currentCard.getValue();
-            if (isAce(currentCard)) {
-                aces++;
-                while (sum > 21 && aces > 0) {
-                    sum -= 10;
-                    aces--;
-                }
-            }
-            totalSum += sum;
-        }
-        return totalSum;
-    }
-
     public boolean canSplit(Hand hand) {
         List<Card> c = hand.getCards();
         BlackJackCard firstCard = (BlackJackCard) c.getFirst();
         BlackJackCard lastCard = (BlackJackCard) c.getLast();
         return (c.size() == 2 && firstCard.getValue() == lastCard.getValue());
+    }
+
+    public String s1(Hand h) {
+        int currentHandValue = calculateHandValue(h);
+        if (isTwentyOne(dealersHand) && isTwentyOne(h)) {
+            return "Push";
+
+        } else if (isTwentyOne(dealersHand)) {
+            return "Dealer vinder!";
+        } else {
+            doPlayerActions(h);
+
+            dealerLogic();
+
+        }
+        return s(h);
+    }
+
+
+    public String s(Hand h) {
+        if (calculateHandValue(h) > 21) {
+
+            return "busted!";
+        } else if (dealerHandValue > 21) {
+            return "Busted!";
+        } else if (dealerHandValue > currentHandValue) {
+            return "Dealer vinder!";
+        } else if (dealerHandValue < currentHandValue) {
+            return name + "vinder!";
+        }
+
+
+        return "";
     }
 
 }

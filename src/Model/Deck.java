@@ -14,7 +14,7 @@ public abstract class Deck {
             int i = 1;
 
             while (i < 15) {
-                cardDeck.add(new Card(i, card));
+                cardDeck.add(new BlackJackCard(i, card));
                 i++;
             }
         }

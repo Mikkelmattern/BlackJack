@@ -1,12 +1,18 @@
 package Model;
 
+import Model.BlackJack.BlackJackCard;
+
+import java.util.Iterator;
 import java.util.List;
 
-public class Hand {
+public abstract class Hand {
     List<Card> cardsInHand;
     public List<Card> getCards(){
         return cardsInHand;
     }
+
+    public abstract int getValue();
+
 
     @Override
     public String toString() {
