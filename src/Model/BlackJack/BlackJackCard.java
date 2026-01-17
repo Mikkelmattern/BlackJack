@@ -11,8 +11,11 @@ public class BlackJackCard extends Card {
         super(cardNumber, type);
         makeBlackJack();
     }
+    public boolean isAce() {
+        return cardNumber == 14;
+    }
 
-    void makeBlackJack() {
+   public void makeBlackJack() {
         if (cardNumber >= 10 && cardNumber != 14) {
             value = 10;
         } else if (cardNumber == 14) {
