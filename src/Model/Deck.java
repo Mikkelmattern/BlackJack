@@ -20,21 +20,6 @@ public abstract class Deck {
         }
     }
 
-    public void createBlackJackDeck() {
-        for (CardType card : CardType.values()) {
-            int i = 1;
-
-            while (i < 15) {
-                cardDeck.add(new BlackJackCard(i, card));
-                i++;
-            }
-        }
-        for (Card c : cardDeck) {
-            if (c instanceof BlackJackCard bj) {
-                bj.makeBlackJack();
-            }
-        }
-    }
 
     public void shuffleDeck() {
         Collections.shuffle(cardDeck);
@@ -48,4 +33,8 @@ public abstract class Deck {
     public String toString() {
         return "" + cardDeck;
     }
+    public Card draw() {
+        return cardDeck.removeFirst();
+    }
+
 }

@@ -1,14 +1,19 @@
 package Model.BlackJack;
 
 import Model.Card;
+import Model.Deck;
 import Model.Hand;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class BlackJackHand extends Hand {
-    List<BlackJackCard> cardsInHand;
+    List<BlackJackCard> cardsInHand = new ArrayList<>();
 
+   public BlackJackHand() {
+
+    }
 
     public int getValue() {
         Iterator<Card> iterator = getCards().iterator();
@@ -16,7 +21,7 @@ public class BlackJackHand extends Hand {
         int aces = 0;
         while (iterator.hasNext()) {
             Card currentCard = iterator.next();
-            if(!(currentCard instanceof BlackJackCard currentBlackJackCard)){
+            if (!(currentCard instanceof BlackJackCard currentBlackJackCard)) {
                 throw new ClassCastException("Expected BlackJackCard, got " + currentCard.getClass().getSimpleName());
             }
             totalSum += currentCard.getValue();
@@ -30,8 +35,6 @@ public class BlackJackHand extends Hand {
             totalSum += totalSum;
 
 
-
-
         }
         return totalSum;
     }
@@ -41,8 +44,9 @@ public class BlackJackHand extends Hand {
     public String toString() {
         return super.toString();
     }
-    public void addCard(Hand cardsToGet) {
+
+    public void addCardValue(Deck cardsToGet) {
         List<Card> cards = cardsToGet.getCards();
-        cardsInHand.add((BlackJackCard) cards.get(cardsInHand.size()+1));
+        cardsInHand.add((BlackJackCard) cards.get(cardsInHand.size() + 1));
     }
 }

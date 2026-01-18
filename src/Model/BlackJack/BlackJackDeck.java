@@ -12,7 +12,7 @@ public class BlackJackDeck extends Deck {
     List<Card> cardDeck = new ArrayList<>();
 
     public BlackJackDeck() {
-        createDeck();
+        createDeckAndShuffle();
     }
 
     public void createDeck() {
@@ -34,8 +34,26 @@ public class BlackJackDeck extends Deck {
         return cardDeck;
     }
 
+    public void createDeckAndShuffle() {
+        createBlackJackDeck();
+        shuffleDeck();
+    }
 
+    public void createBlackJackDeck() {
+        for (CardType card : CardType.values()) {
+            int i = 1;
 
+            while (i < 15) {
+                cardDeck.add(new BlackJackCard(i, card));
+                i++;
+            }
+        }
+        for (Card c : cardDeck) {
+            if (c instanceof BlackJackCard bj) {
+                bj.makeBlackJack();
+            }
+        }
+    }
     @Override
     public String toString() {
         return "" + cardDeck;

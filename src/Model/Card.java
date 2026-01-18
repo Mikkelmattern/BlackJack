@@ -4,7 +4,7 @@ public class Card {
     int cardNumber;
     CardType type;
 
-    Card(int cardNumber, CardType type) {
+    public Card(int cardNumber, CardType type) {
         this.cardNumber = cardNumber;
         this.type = type;
     }
@@ -45,4 +45,5 @@ public class Card {
         }
         return numCard + type.getEmoji();
     }
+
 }

@@ -4,16 +4,13 @@ import Model.*;
 import Model.BlackJack.BlackJackCard;
 import Model.BlackJack.BlackJackDeck;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class StartApp {
     BlackJackDeck deck1 = new BlackJackDeck();
     Player dealer = new Player("Dealer");
     Scanner sc = new Scanner(System.in);
-    Hand dealersHand = dealer.getPlayerHand().getFirst();
+    Hand dealersHand;
     List<Player> playerList = new ArrayList<>();
     int dealerHandValue;
     int currentHandValue;
@@ -27,20 +24,21 @@ public class StartApp {
      * game loop until the user chooses to exit.
      */
     public void begin() {
-        createDeckAndShuffle(deck1);
-        addPlayer(100, "Mikkel");
+        addPlayer("Mikkel");
+        Player dealer = new Player("Dealer");
         while (true) {
-            initDealer();
-            System.out.println("Dealers cards: " + dealersHand + "\n" + calculateHandValue(dealersHand));
+            dealer.initBlackJackPlayer();
+            System.out.println("Dealers cards: " + dealersHand + "\n" + playerList.getFirst());
             for (Player p : playerList) {
-
+                p.initBlackJackPlayer();
+            givePlayerCards(p);
                 List<Hand> playersCard = p.getPlayerHand();
                 String name = p.getName();
                 Hand currenthand = p.getPlayerHand().getFirst();
                 Hand dealersHand = dealer.getPlayerHand().getFirst();
-                int dealerHandValue = calculateHandValue(dealersHand);
+                int dealerHandValue = dealersHand.getValue();
                 for (Hand h : p.getPlayerHand()) {
-                    int currentHandValue = calculateHandValue(h);
+                    int currentHandValue = h.getValue();
                     if (isTwentyOne(dealersHand) && isTwentyOne(currenthand)) {
                         System.out.println("Push!");
                         continue;
@@ -53,7 +51,7 @@ public class StartApp {
                         dealerLogic();
 
                     }
-                    if (calculateHandValue(h) > 21) {
+                    if (currentHandValue > 21) {
                         System.out.println(name + "busted!");
                         return;
                     } else if (dealerHandValue > 21) {
@@ -75,16 +73,12 @@ public class StartApp {
         }
     }
 
-    public void createDeckAndShuffle(Deck deck) {
-        deck.createBlackJackDeck();
-        deck.shuffleDeck();
-    }
 
     public void doPlayerActions(Hand h) {
         while (canHit(h)) {
             PlayerActions actionAnswer = promptHitStandOrSplit(h);
             if (actionAnswer == PlayerActions.HIT) {
-                System.out.println(h.getCards() + "\n" + calculateHandValue(h));
+                System.out.println(h.getCards() + "\n" + h.getValue());
             } else if (actionAnswer == PlayerActions.SPLIT && canSplit(h)) {
                 //TODO
                 //add doSplit method
@@ -119,14 +113,14 @@ public class StartApp {
     }
 
     public void dealerLogic() {
-        while (calculateHandValue(dealersHand) < 17) {
+        while (dealersHand.getValue() < 17) {
             doHit(dealersHand);
-            System.out.println(dealersHand + "\n" + calculateHandValue(dealersHand));
+            System.out.println(dealersHand + "\n" + dealersHand.getValue());
         }
     }
 
-    public void addPlayer(int startValue, String name) {
-        playerList.add(new Player(startValue, name));
+    public void addPlayer(String name) {
+        playerList.add(new Player(name, deck1));
     }
 
     public void givePlayerCards(Player player) {
@@ -138,15 +132,15 @@ public class StartApp {
     }
 
     public boolean isTwentyOne(Hand hand) {
-        return calculateHandValue(hand) == 21;
+        return  hand.getValue()== 21;
     }
 
     public boolean canHit(Hand hand) {
-        return calculateHandValue(hand) > 21;
+        return hand.getValue() > 21;
     }
 
     public void doHit(Hand hand) {
-        hand.addCard(hand);
+        hand.draw();
     }
 
     public void doStand(Player player) {
@@ -161,7 +155,7 @@ public class StartApp {
     }
 
     public String s1(Hand h) {
-        int currentHandValue = calculateHandValue(h);
+        int currentHandValue = h.getValue();
         if (isTwentyOne(dealersHand) && isTwentyOne(h)) {
             return "Push";
 
@@ -178,7 +172,7 @@ public class StartApp {
 
 
     public String s(Hand h) {
-        if (calculateHandValue(h) > 21) {
+        if (h.getValue() > 21) {
 
             return "busted!";
         } else if (dealerHandValue > 21) {
